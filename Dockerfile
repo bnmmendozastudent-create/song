@@ -1,12 +1,12 @@
-# Stage 1: Build the JAR file using Maven Wrapper
-FROM maven:3.8.5-openjdk-21 AS build
+# Stage 1: Build the JAR file using Maven and Eclipse Temurin Java 21
+FROM maven:3.9.6-eclipse-temurin-21 AS build
 WORKDIR /app
 COPY . .
 RUN chmod +x ./mvnw
 RUN ./mvnw clean package -DskipTests
 
-# Stage 2: Run the built JAR file using OpenJDK
-FROM openjdk:21-jdk-slim
+# Stage 2: Run the built JAR file using a lightweight Java 21 Runtime
+FROM eclipse-temurin:21-jr-jammy
 WORKDIR /app
 COPY --from=build /app/target/*.jar app.jar
 EXPOSE 8080
